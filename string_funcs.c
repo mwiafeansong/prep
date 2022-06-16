@@ -8,8 +8,7 @@
  */
 int _strlen(char *s)
 {
-	int i;
-	int sum = 0;
+	int i, sum = 0;
 
 	for (i = 0; s[i] != '\0'; i++)
 		sum++;
@@ -89,18 +88,18 @@ int _strcmp(char *s1, char *s2)
 /**
  * _concatpath - increases space for s1 and concatenates with s2
  * @pathdir: first string
- * @av: second string
+ * @str: second string
  *
  * Return: concatenated path
  */
-char *_concatpath(char *pathdir, char *av)
+char *_concatpath(char *pathdir, char *str)
 {
-	int i, len_dir, len_av, tot_len, len_concatstr;
+	int i, len_dir, len_str, tot_len, len_concatstr;
 	char *concatstr;
 
 	len_dir = _strlen(pathdir);
-	len_av = _strlen(av);
-	tot_len = len_dir + len_av + 2;
+	len_str = _strlen(str);
+	tot_len = len_dir + len_str + 2;
 
 	concatstr = malloc(tot_len * sizeof(char));
 	if (concatstr == NULL)
@@ -111,8 +110,8 @@ char *_concatpath(char *pathdir, char *av)
 	concatstr[len_concatstr] = '/';
 	len_concatstr++;
 
-	for (i = 0; av[i] != '\0'; i++)
-		concatstr[len_concatstr + i] = av[i];
+	for (i = 0; str[i] != '\0'; i++)
+		concatstr[len_concatstr + i] = str[i];
 	concatstr[len_concatstr + i] = '\0';
 
 	return (concatstr);

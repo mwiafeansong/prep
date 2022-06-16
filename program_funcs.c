@@ -55,6 +55,7 @@ char *read_line(void)
 /**
  * fullpath - gets full path of user input
  * @av: user input strings
+ * @pathdirs: path directories
  *
  * Return: full path
  */
@@ -63,6 +64,7 @@ char *fullpath(char **av, char **pathdirs)
 	char *concatstr, *fullpath;
 	int i, fullpathflag = 0;
 	struct stat st;
+	struct stat st2;
 
 	for (i = 0; pathdirs[i] != NULL; i++)
 	{
@@ -78,9 +80,7 @@ char *fullpath(char **av, char **pathdirs)
 	if (fullpathflag == 0)
 		fullpath = av[0];
 
-	free(pathdirs);
-
-	if (stat(fullpath, &st) != 0)
+	if (stat(fullpath, &st2) != 0)
 		return (NULL);
 
 	return (fullpath);
@@ -89,42 +89,32 @@ char *fullpath(char **av, char **pathdirs)
 /**
  * _launch - calls execve
  * @av: user input strings
- * @line: user input
  * @fullpath: full path of command entered by user
  *
  * Return: 1 (on success) 0 (on failure)
  */
-int _launch(char **av, char *line, char *fullpath)
+int _launch(char **av, char *fullpath)
 {
 	pid_t child_pid;
-	int i, status, exitstatus;
+	int status, exitstatus;
 
 	child_pid = fork();
 	if (child_pid == -1)
 	{
-		perror("Error:");
-		return (0);
+		perror("Error");
+		exit(1);
 	}
 	else if (child_pid == 0)
 	{
-		if (execve(av[0], av, NULL) == -1)
-			perror("Error");
-		for (i = 0; av[i] != NULL; i++)
-			free(av[i]);
-		free(av);
-		free(line);
-		exit(127);
+		if (execve(fullpath, av, NULL) == -1)
+			perror(av[0]);
 	}
 	else
 	{
 		wait(&status);
 		if (WIFEXITED(status))
 			exitstatus = WEXITSTATUS(status);
-		for (i = 0; av[i] != NULL; i++)
-			free(av[i]);
-		free(av);
-		free(line);
 	}
 
-	return (1);
+	return (exitstatus);
 }

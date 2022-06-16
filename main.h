@@ -7,6 +7,7 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 #include <sys/stat.h>
+#include <string.h>
 
 #define BUFSIZE 1024
 #define TOK_BUFSIZE 128
@@ -24,7 +25,7 @@ int _strlen(char *s);
 char *_strcat(char *dest, char *src);
 char *_strdup(char *str);
 int _strcmp(char *s1, char *s2);
-char *_concatpath(char *pathdir, char *av);
+char *_concatpath(char *pathdir, char *str);
 
 /* split functions */
 int is_delim(char c, char *delim);
@@ -42,13 +43,12 @@ void _puts(char *str);
 
 /* builtin functions */
 int print_env(void);
-int exit_shell(void);
-int builtincheck(char **av, char *line);
+int builtincheck(char **av, char *line, char **pathdirs, int exitstatus);
 
 /* program flow functions */
 void prompt(void);
 char *read_line(void);
 char *fullpath(char **av, char **pathdirs);
-int _launch(char **av, char *line, char *fullpath);
+int _launch(char **av, char *fullpath);
 
 #endif
